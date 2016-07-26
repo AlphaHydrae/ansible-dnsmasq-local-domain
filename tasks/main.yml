@@ -1,12 +1,16 @@
 ---
 
 # Homebrew
-- name: create dnsmasq configuration (Homebrew)
+- name: Create dnsmasq configuration from sample (Homebrew)
   command: cp /usr/local/opt/dnsmasq/dnsmasq.conf.example /usr/local/etc/dnsmasq.conf creates=/usr/local/etc/dnsmasq.conf
   when: ansible_pkg_mgr == 'homebrew'
-- name: configure dnsmasq (Homebrew)
+- name: Configure dnsmasq (Homebrew)
   lineinfile: dest=/usr/local/etc/dnsmasq.conf regexp=^address=\/{{ dnsmasq_domain }}\/127\.0\.0\.1 line=address=/{{ dnsmasq_domain }}/127.0.0.1
   when: ansible_pkg_mgr == 'homebrew'
+
+# Other package managers
+- fail: msg="{{ ansible_pkg_mgr }} is not a supported package manager (Homebrew is supported)"
+  when: ansible_pkg_mgr != 'homebrew'
 
 # Common
 - name: mkdir /etc/resolver
