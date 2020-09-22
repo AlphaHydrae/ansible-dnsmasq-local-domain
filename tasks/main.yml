@@ -2,7 +2,10 @@
 
 # Homebrew
 - name: Configure dnsmasq (Homebrew)
-  lineinfile: dest=/usr/local/etc/dnsmasq.conf regexp=^address=\/{{ dnsmasq_domain }}\/127\.0\.0\.1 line=address=/{{ dnsmasq_domain }}/127.0.0.1
+  lineinfile:
+    dest: /usr/local/etc/dnsmasq.conf
+    regexp: "^address=\\/{{ dnsmasq_domain }}\\/127\\.0\\.0\\.1"
+    line: "address=/{{ dnsmasq_domain }}/127.0.0.1"
   when: ansible_pkg_mgr == 'homebrew'
 
 # Other package managers
@@ -11,6 +14,16 @@
 
 # Common
 - name: mkdir /etc/resolver
-  file: path=/etc/resolver owner=root group=wheel state=directory
+  file:
+    path: /etc/resolver
+    owner: root
+    group: wheel
+    state: directory
+
 - name: configure system
-  copy: src=resolver dest=/etc/resolver/{{ dnsmasq_domain }} owner=root group=wheel mode=0644
+  copy:
+    src: resolver
+    dest: /etc/resolver/{{ dnsmasq_domain }}
+    owner: root
+    group: wheel
+    mode: 0644
